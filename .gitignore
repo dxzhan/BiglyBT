@@ -98,6 +98,7 @@ hs_err_pid*
 ### Eclipse template
 
 .metadata
+!assembly/bin
 bin/
 tmp/
 *.tmp

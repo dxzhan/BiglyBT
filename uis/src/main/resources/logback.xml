@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+	<!--    <property resource="cfg.properties" />-->
+	<property name="LOG_HOME" value="${log.home:-/data/applog/biglybt}"/>
+	<property name="LOG_PATTERN_LAYOUT" value="%d{yyyyMMdd.HHmmss.SSS} [%-5level] [%thread] %m [%logger{35}]%n"/>
+	<property name="LOG_MAX_FILESIZE" value="20MB"/>
+
+	<contextName>${app_name}</contextName>
+
+	<!--	<conversionRule conversionWord="coloredLevel" converterClass="play.api.libs.logback.ColoredLevel" />-->
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+		<resetJUL>true</resetJUL>
+	</contextListener>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HHmmss} %m [%thread-%logger{38}:%L]%n%xException{10}</pattern>
+		</encoder>
+	</appender>
+
+	<!--每天创建一个日志文件夹，当天的日志写入到当天日期的文件夹内-->
+	<appender name="ROLLINGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!--<fileNamePattern>${application.home:-.}/logs/%d{yyyyMMdd}/main.%i.log</fileNamePattern>-->
+			<fileNamePattern>${LOG_HOME}/logs/%d{yyyyMMdd}/main.%i.log</fileNamePattern>
+			<!--<maxHistory>90</maxHistory>-->
+			<maxFileSize>${LOG_MAX_FILESIZE}</maxFileSize>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${LOG_PATTERN_LAYOUT}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+	</appender>
+
+	<!--project default level -->
+	<!--    <logger name="com.biglybt" level="DEBUG" additivity="false">-->
+	<!--        <appender-ref ref="STDOUT"/>-->
+	<!--        <appender-ref ref="ROLLINGFILE"/>-->
+	<!--    </logger>-->
+
+	<root level="INFO">
+		<appender-ref ref="STDOUT"/>
+		<appender-ref ref="ROLLINGFILE"/>
+	</root>
+
+</configuration>
